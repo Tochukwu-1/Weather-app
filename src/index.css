@@ -108,7 +108,7 @@ main section .left {
   flex-direction: column;
   justify-content: space-between;
 }
-.left .day,
+.left .today,
 .left .weekly  {
   height: 35%;
 }
@@ -116,7 +116,7 @@ main section .left {
   height: 25%;
   border: 2px solid blue;
 }
-.left .day{
+.left .today{
   border: 2px solid green;
 }
 aside{
@@ -134,21 +134,31 @@ aside{
   height: 75%;
   width: 100%;
 }
-.weekly div div{
+.weekly .days .day{
   margin:  0 1px;
   padding: 0 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   text-align: center;
   background-color:  #272541;
   border-radius: 8px;
+  width: 13%;
 }
 li{
   list-style-type: none;
+  width: 100%;
 }
-
+.weekly li img{
+  width: 100%;
+}
+.weekly .temp{
+  display: flex;
+  justify-content: space-between;
+  width: 110%;
+  font-size: 10px;
+}
 main section aside {
   width: 35%;
 }
@@ -158,7 +168,6 @@ footer {
   position: sticky;
   top: 100%;
   height: fit-content;
-  border: 2px solid;
 }
 footer.attribution {
   font-size: 11px;
