@@ -8,7 +8,8 @@ import loading from './assets/images/icon-loading.svg';
 function App() {
   const [location, setLocation]= useState({inputLocation:'America', currentLocation: ""})
   const [isLoading, setIsLoading] = useState(false)
-  const [weather, setWeather] =useState({dailyweather: [], hourlyWeather:[]})
+  const [weather, setWeather] =useState({dailyweather: [], hourlyWeather:[], currentWeather: []})
+  const [country, setCountry] = useState({town:"", country:""})
 
 
 function handleLocation(e){
@@ -28,16 +29,25 @@ function handleLocation(e){
         const geoData = await geoRes.json()
       console.log(geoData.results[0])
       const locationParameters = geoData.results[0];
-      const {latitude:lat, longitude:long} = locationParameters;
+      const {latitude:lat, longitude:long, country, name} = locationParameters;
+      setCountry({town: name, country:country})
       
       // weather api for the daily weather
-      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?longitude=${lat}&latitude=${long}&daily=weather_code,temperature_2m_min,temperature_2m_max&timezone=auto`)
+      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?longitude=${lat}&latitude=${long}&daily=weather_code,temperature_2m_min,temperature_2m_max`)
       if(!weatherRes.ok){
-        throw new Error("No response received")
+        throw new Error("No response received for daily weather")
       }
       const weatherData = await weatherRes.json()
       console.table(weatherData.daily)
       setWeather(weather => ({...weather, dailyWeather: weatherData.daily}))
+      
+      // current weather api
+      const currentRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m`)
+      if(!currentRes) throw new Error('failed to fetch current weather');
+      const currentData = await currentRes.json()
+      console.log(currentData.current)
+      setWeather(weather => ({...weather, currentWeather: currentData.current}))
+
     } catch (error){
       console.log(error)
     } finally{
@@ -55,7 +65,7 @@ function handleLocation(e){
         {isLoading && <img src={loading}/>}
       </div>
       <div className="bottom">
-        <MainContent weather={weather} />
+        <MainContent weather={weather} country={country} />
       </div>
       <footer>
         <div className="attribution">

@@ -8,12 +8,12 @@
 }
 
 * {
-  font-family: ;
+  /* font-family: ; */
   color: #fff;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* border: 2px solid; */
+  font-family: DMsans;
 }
 
 body {
@@ -24,6 +24,10 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
+}
+p{
+  font-size: small;
+  color: #aeaeb7;
 }
 .top,
 .bottom {
@@ -108,16 +112,13 @@ main section .left {
   flex-direction: column;
   justify-content: space-between;
 }
+
 .left .today,
 .left .weekly  {
   height: 35%;
 }
 .left .parameters{
   height: 25%;
-  border: 2px solid blue;
-}
-.left .today{
-  border: 2px solid green;
 }
 aside{
   border: 2px solid orange;
@@ -161,6 +162,46 @@ li{
 }
 main section aside {
   width: 35%;
+}
+.parameters{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.parameter{
+  background-color: #272541;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border-radius: 8px;
+  width: 23%;
+  margin: 0 3px 0 0;
+}
+
+.today{
+  background-image: url(assets/images/bg-today-large.svg);
+  background-size: cover;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10px;
+}
+.today .nameDate{
+  width: 60%;
+}
+.today .weatherTemp{
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+  font-size: 2.5em;
+  font-style: italic;
+  font-weight: bold;
+}
+.today img{
+  width: 2.5em;
+  font-size: 0.5em;
 }
 
 
