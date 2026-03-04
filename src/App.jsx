@@ -33,7 +33,7 @@ function handleLocation(e){
       setCountry({town: name, country:country})
       
       // weather api for the daily weather
-      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?longitude=${lat}&latitude=${long}&daily=weather_code,temperature_2m_min,temperature_2m_max`)
+      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?longitude=${long}&latitude=${lat}&daily=weather_code,temperature_2m_min,temperature_2m_max&timezone=auto`)
       if(!weatherRes.ok){
         throw new Error("No response received for daily weather")
       }
@@ -42,11 +42,18 @@ function handleLocation(e){
       setWeather(weather => ({...weather, dailyWeather: weatherData.daily}))
       
       // current weather api
-      const currentRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m`)
+      const currentRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`)
       if(!currentRes) throw new Error('failed to fetch current weather');
       const currentData = await currentRes.json()
       console.log(currentData.current)
       setWeather(weather => ({...weather, currentWeather: currentData.current}))
+
+      //hourly Api
+      const hourRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto`)
+      if(!hourRes) throw new Error('failed to fetch hourly weather')
+      const hourData = await hourRes.json()
+      console.log(hourData)
+      setWeather(weather => ({...weather, hourlyWeather: hourData.hourly}))
 
     } catch (error){
       console.log(error)

@@ -7,8 +7,8 @@ function Header({onhandleLocation, location, setLocation}) {
         <header>
             <h1>How's the sky looking today?</h1>
             <form onSubmit={(e) => onhandleLocation(e)}>
-            <input type="text" placeholder='Search for a place...' value={location.inputLocation} onChange={(e)=>setLocation({...location, inputLocation: e.target.value})}/>
-            <button>Search</button>
+            <input type="text" placeholder='🔍 Search for a place...' value={location.inputLocation} onChange={(e)=>setLocation({...location, inputLocation: e.target.value})}/>
+            <button id='searchBtn'>Search</button>
             </form>
         </header>
     )

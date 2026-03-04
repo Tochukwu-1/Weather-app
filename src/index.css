@@ -38,10 +38,10 @@ p{
   align-items: center;
 }
 div.top {
-  height: 25%;
+  height: 35%;
 }
 div.bottom {
-  height: 70%;
+  height: 60%;
 }
 
 #weather-app {
@@ -50,15 +50,14 @@ div.bottom {
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  width: 90vw;
-  height: 95vh;
+  width:85vw;
+  height: 90vh;
 }
 #navigationBar {
   width: 100%;
   display: inherit;
   height: 15%;
   justify-content: space-between;
-  /* margin-bottom: 50px; */
 }
 header {
   text-align: center;
@@ -66,7 +65,10 @@ header {
   display: inherit;
   flex-direction: column;
   justify-content: space-between;
-  width: 60%;
+  width: 100%;
+}
+header h1{
+  font-size: 2.5em;
 }
 header form {
   width: 100%;
@@ -81,15 +83,16 @@ header input {
   border-radius: 7px;
   background-color: #272541;
   outline: none;
-  width: 60%;
-  height: 60%;
+  width: 300px;
+  height: 50px;
   border: none;
 }
 header button {
   padding: 0 20px;
   margin-left: 5px;
   border: none;
-  height: 60%;
+  height: 50px;
+  margin-left: 10px;
   border-radius: 7px;
   background-color: #4455da;
 }
@@ -106,7 +109,7 @@ main section {
   height: 100%;
 }
 main section .left {
-  width: 60%;
+  width: 65%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -118,10 +121,7 @@ main section .left {
   height: 35%;
 }
 .left .parameters{
-  height: 25%;
-}
-aside{
-  border: 2px solid orange;
+  height: 23%;
 }
 .weekly{
   display: flex;
@@ -132,36 +132,39 @@ aside{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 75%;
+  height: 80%;
   width: 100%;
 }
 .weekly .days .day{
   margin:  0 1px;
-  padding: 0 10px;
+  padding-top: 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  text-align: center;
+  align-items: center;
   background-color:  #272541;
   border-radius: 8px;
   width: 13%;
+  text-align: center;
 }
 li{
   list-style-type: none;
   width: 100%;
 }
 .weekly li img{
-  width: 100%;
+  width: 50%;
 }
 .weekly .temp{
   display: flex;
   justify-content: space-between;
-  width: 110%;
-  font-size: 10px;
+  width: 100%;
+  font-size: 12px;
+  margin: 0 10px 10px 10px;
+  padding: 0 5px;
 }
 main section aside {
-  width: 35%;
+  width: 30%;
 }
 .parameters{
   display: flex;
@@ -184,12 +187,11 @@ main section aside {
   background-size: cover;
   border-radius: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  margin: 0 10px;
 }
 .today .nameDate{
-  width: 60%;
+  width: 55%;
 }
 .today .weatherTemp{
   width: 40%;
@@ -204,16 +206,133 @@ main section aside {
   font-size: 0.5em;
 }
 
+.right{
+  background-color: #272541;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  
+}
+aside .top{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  width: 85%;
+  font-size: smaller;
+  height: 60px;
+  height: 10%;
+  
+}
+.hours{
+  height: 89%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  overflow: auto;
+  scrollbar-width: thin;
+  width: 100%;
+  scrollbar-color: #3d3b5e transparent;
+  
+}
+
+.hour{
+  width: 90%;
+  padding: 6px 0;
+  margin: 3px 0;
+  display: inherit;
+  border-radius: 10px;
+  background-color: #3d3b5e;
+}
+
+
+select{
+  border: none;
+  outline: none;
+  float: right;
+  display: block;
+  background-color: #3d3b5e;
+  padding: 3px;
+  border-radius: 5px;
+}
+select:active{
+  background-color: green;
+  outline: none;
+}
+option{
+  background-color: #272541;
+  border: none;
+  outline: none;
+  margin: 3px;
+  
+}
+option:hover{
+  accent-color: green;
+}
+
+.hourlycode{
+  width:2em;
+}
+.lefthour{
+  display: flex;
+  width: 40%;
+  justify-content: space-around;
+  align-items: center;
+}
+.hourtemp{
+  display: flex;
+  justify-content: right;
+  width: 53%;
+  align-items: center;
+}
+
+
+/* header units styling */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 footer {
   position: sticky;
   top: 100%;
   height: fit-content;
+  margin-top: 30px;
 }
 footer.attribution {
   font-size: 11px;
   text-align: center;
+  color: #272541;
 }
 footer.attribution a {
-  color: hsl(228, 45%, 44%);
+  color: #3e52a3;
 }
