@@ -13,20 +13,10 @@ import Parameters from "./components/Parameters";
 import Weekly from "./components/Weekly";
 import Hours from "./components/Hours";
 
+function MainContent({ weather, country, unit, dayMenu, setDayMenu }) {
 
-function MainContent({ weather, country }) {
-  
-  const weekdays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-  const week = weekdays.map((string) => string.slice(0, 3));
-  const [selectedDay, setSelectedDay] = useState("Mon");
+  const date = new Date();
+  const [selectedDay, setSelectedDay] = useState(handleDay(date));
 
   // weekly weather
   const [weeklyWeather, setweeklyWeather] = useState({
@@ -105,7 +95,7 @@ function MainContent({ weather, country }) {
   // weekday date configuration
   function handleDay(date) {
     return new Intl.DateTimeFormat("en", {
-      weekday: "short",
+      weekday: "long",
     }).format(new Date(date));
   }
 
@@ -135,7 +125,7 @@ function MainContent({ weather, country }) {
             currentWeather={currentWeather}
             getWeatherIcon={getWeatherIcon}
           />
-          <Parameters currentWeather={currentWeather} />
+          <Parameters unit={unit} currentWeather={currentWeather} />
           <Weekly
             weeklyWeather={weeklyWeather}
             handleDay={handleDay}
@@ -143,27 +133,17 @@ function MainContent({ weather, country }) {
           />
         </div>
         <aside className="right">
-          <div className="top">
-            <h4>Hourly forecast</h4>
-            <select
-              name="day"
-              id="week"
-              className="activeday"
-              onChange={(e) => setSelectedDay(e.target.value)}
-            >
-              {week.map((day, i) => (
-                <option key={day} value={day}>
-                  {weekdays.at(i)}
-                </option>
-              ))}
-            </select>
-          </div>
+          
           <Hours
+            dayMenu={dayMenu}
+            setDayMenu={setDayMenu}
             weather={weather}
             handleDay={handleDay}
             handleTime={handleTime}
             selectedDay={selectedDay}
             getWeatherIcon={getWeatherIcon}
+            setSelectedDay={setSelectedDay}
+            date={date}
           />
         </aside>
       </section>

@@ -10,8 +10,8 @@ function Weekly({weeklyWeather, handleDay, getWeatherIcon}) {
             <h4>Daily Forcast</h4>
             <div className="days">
               {dates.map((date, i) => (
-                <div className="day">
-                  <li>{handleDay(date)}</li>
+                <div key={i} className="day">
+                  <li>{handleDay(date).slice(0, 3)}</li>
                   <li>
                     <img src={getWeatherIcon(weather_code.at(i))} />
                   </li>

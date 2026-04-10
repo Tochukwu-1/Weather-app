@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDom from 'react-dom/client'
 
 
-function Parameters({currentWeather}) {
+function Parameters({currentWeather, unit}) {
     const {
         precipitation,
         temperature,
@@ -21,11 +21,11 @@ function Parameters({currentWeather}) {
               </div>
               <div className="parameter">
                 <p>Wind</p>
-                <li>{windSpeed || 0} km/h</li>
+                <li>{windSpeed || 0} {unit.windSpeed==="kmh"?"km/h": "mph"}</li>
               </div>
               <div className="parameter">
                 <p>Precipitation</p>
-                <li>{precipitation || 0} mm</li>
+                <li>{precipitation || 0} {unit.precipitation ==="millimeter"? "mm": "inches"}</li>
               </div>
             </div>
     )
