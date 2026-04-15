@@ -3,10 +3,9 @@ import Nav from "./Nav.jsx";
 import Header from "./Header.jsx";
 import MainContent from "./MainContent.jsx";
 import "./index.css";
-import loading from "./assets/images/icon-loading.svg";
 
 function App() {
-  const [menu, setMenu] = useState(false)
+  const [unitMenu, setUnitMenu] = useState(false)
   const [searchHistoryMenu, setSearchHistoryMenu] = useState(false)
   const [dayMenu, setDayMenu] = useState(false)
 
@@ -31,11 +30,20 @@ function App() {
     precipitation: "millimeter",
   });
   function toggleMenu() {
-    setMenu(false);
+    setTimeout(()=>
+      {setUnitMenu(false);
     setSearchHistoryMenu(false);
-    setDayMenu(false)
-
+    setDayMenu(false)},300)
   }
+const toggleUnitMenu = () => {
+         setUnitMenu(true)
+         if(unitMenu){
+             setTimeout(() => {
+                 setUnitMenu(false);
+                }, 300);
+            }
+        }
+
   let updated = []
   const addName = (name) => {
   if (name === searchName[0] || name === searchName[1] || name === searchName[2]){ 
@@ -233,7 +241,7 @@ let hourRes = "";
     location.currentLocation,
     unit.temperature,
     unit.precipitation,
-    unit.windSpeed,
+    unit.windSpeed
   ]);
     function handleLocation(e) {
     e.preventDefault();
@@ -242,20 +250,22 @@ let hourRes = "";
       ...location,
       currentLocation: location.inputLocation,
     }));
+    setTimeout(()=> setLocation((location) => ({ ...location, inputLocation: "" })), 3000);
   }
   function handleKeyPress(e) {
     if (e.key === "Enter" || e.key === "Escape") {
-      setMenu(false)
+      setUnitMenu(false)
       setTimeout(() => {
         e.target.blur();
       }, 1000);
     }
   }
   return (
-    <div id="weather-app" onClick={dayMenu|| searchHistoryMenu||menu?()=>toggleMenu():null}>
+    <div id="weather-app" >
       <div className="top">
-        <Nav unit={unit} setUnit={setUnit} menu={menu} setMenu={setMenu} />
+        <Nav unit={unit} setUnit={setUnit} unitMenu={unitMenu} toggleUnitMenu={toggleUnitMenu}/>
         <Header
+        isLoading={isLoading}
         searchName={searchName}
           onhandleLocation={handleLocation}
           setLocation={setLocation}
@@ -265,7 +275,6 @@ let hourRes = "";
           setSearchHistoryMenu = {setSearchHistoryMenu}
 
         />
-        {isLoading && <img src={loading} />}
       </div>
       <div className="bottom">
         <MainContent weather={weather} country={country} unit={unit} dayMenu ={dayMenu} setDayMenu={setDayMenu} />

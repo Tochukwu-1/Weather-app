@@ -2,16 +2,19 @@ import logo from './assets/images/logo.svg';
 import dropdown from './assets/images/icon-dropdown.svg';
 import settings from './assets/images/icon-units.svg';
 import "./css/nav.css"
+import { useState } from 'react';
 
-function Nav({unit, setUnit, menu, setMenu}) {
+function Nav({unit, setUnit, unitMenu, toggleUnitMenu}) {
+    const [unitSwitch, setUnitSwitch] = useState("Switch Imperial")
+    
     return (
         <nav id='navigationBar'>
             <img src={logo} alt="weather app logo" />
             <div className="units">
-                <span className='unitsButton' onClick={()=>setMenu(!menu)} > <img src={settings}/> Units <img src={dropdown} />
+                <span className={`unitsButton ${unitMenu?"unitsButtonFocus":""}`} onClick={toggleUnitMenu} > <img src={settings}/> Units <img src={dropdown} />
                 </span>
-                {menu && <form onSubmit={(e) => (e)}>
-                    <h4>Switch Imperial</h4>
+                {unitMenu && <form onSubmit={(e) => (e)}>
+                    <h4 className='unitSwitch' onClick={()=> setUnitSwitch(unitSwitch==="Switch Metrics"? "Switch Imperial": "Switch Metrics") |setUnit(unitSwitch === "Switch Imperial"?{...unit,temperature:"fahrenheit", windSpeed:"mph",precipitation:"inch"}:{...unit,temperature:"celcius", windSpeed:"kmh",precipitation:"millimeter"})}>{unitSwitch}</h4>
                     <div className="temperature">
                         <p>Temperature</p>
                         <div className="celcius">

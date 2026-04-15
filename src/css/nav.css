@@ -5,7 +5,7 @@
     align-items: flex-end;
     position: relative;
 }
-.units span{
+.units span.unitsButton{
     display: flex;
     background-color: #272541;
     justify-content: space-around;
@@ -17,6 +17,9 @@
     margin-bottom: 10px;
     cursor: pointer;
 }
+.unitsButtonFocus{
+    border: 2px solid #fff;
+}
 .units form{
     background-color:#272541;
     width: 100%;
@@ -26,6 +29,17 @@
     box-shadow: 0 0 1px;
     position: absolute;
     top: 50px;
+}
+.unitSwitch{
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 5px;
+}
+.unitSwitch:hover{
+    border-radius: 5px;
+    border-color:#d5d4d9;
+    transition: .5s ease;
+
 }
 .units .hr{
     border-bottom:  1px solid #3a4125;
