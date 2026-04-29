@@ -1,39 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import Nav from "./Nav.jsx";
 import Header from "./Header.jsx";
 import MainContent from "./MainContent.jsx";
 import "./index.css";
+import ApiError from "./components/ApiError.jsx";
+import NoSearchResult from "./components/NoSearchResult.jsx";
 
 function App() {
   const [unitMenu, setUnitMenu] = useState(false)
   const [searchHistoryMenu, setSearchHistoryMenu] = useState(false)
   const [dayMenu, setDayMenu] = useState(false)
-
-
-  const [location, setLocation] = useState({
-    inputLocation: "",
-    currentLocation: "",
-    pendingLocation: "",
-  });
+  const [searchError, setSearchError] = useState(false)
+  const [apiError, setApiError] = useState(false)
   const localStorageName = JSON.parse(localStorage.getItem("town"));
-  const [searchName,setSearchName] = useState(localStorageName.slice(0,3) || []);
+  const [searchName,setSearchName] = useState(localStorageName.slice(0,4) || []);
   const [isLoading, setIsLoading] = useState(false);
-  const [weather, setWeather] = useState({
-    dailyweather: [],
-    hourlyWeather: [],
-    currentWeather: [],
-  });
+
+  const [location, setLocation] = useState({inputLocation: "",currentLocation: ""});
+  const [weather, setWeather] = useState({dailyweather: [],hourlyWeather: [],currentWeather: []});
   const [country, setCountry] = useState({ town: "", country: "" });
-  const [unit, setUnit] = useState({
-    temperature: "celcius",
-    windSpeed: "kmh",
-    precipitation: "millimeter",
-  });
+  const [unit, setUnit] = useState({temperature: "celcius",windSpeed: "kmh",precipitation: "millimeter"});
   function toggleMenu() {
     setTimeout(()=>
-      {setUnitMenu(false);
-    setSearchHistoryMenu(false);
-    setDayMenu(false)},300)
+      {
+        setUnitMenu(false);
+        setSearchHistoryMenu(false);
+        setDayMenu(false)
+      },300)
   }
 const toggleUnitMenu = () => {
          setUnitMenu(true)
@@ -44,19 +37,6 @@ const toggleUnitMenu = () => {
             }
         }
 
-  let updated = []
-  const addName = (name) => {
-  if (name === searchName[0] || name === searchName[1] || name === searchName[2]){ 
-    const reupdate =searchName.filter((item) => item !== name);
-    updated = [name, ...reupdate]
-    localStorage.setItem("town", JSON.stringify(updated));
-  setSearchName(updated.slice(0,4))
-  }else{
-  updated = [name, ...searchName];
-  localStorage.setItem("town", JSON.stringify(updated));
-  setSearchName(updated.slice(0,4))
-}
-};
 
 
 
@@ -73,7 +53,7 @@ const toggleUnitMenu = () => {
         setIsLoading(true);
         if (!geoRes) throw new Error("Failed to fetch location");
         const geoData = await geoRes.json();
-        console.log(geoData.results[0]);
+        // console.log(geoData.results[0]);
         const locationParameters = geoData.results[0];
         const {
           latitude: lat,
@@ -82,9 +62,21 @@ const toggleUnitMenu = () => {
           name,
         } = locationParameters;
         setCountry({ town: name, country: country });
-        addName(name)
+        const addName = (name) => {
+      if (searchName.includes(name)) { 
+        const reupdate = searchName.filter((item) => item !== name);
+        const updated = [name, ...reupdate];
+        localStorage.setItem("town", JSON.stringify(updated));
+        setSearchName(updated.slice(0, 4));
+      } else {
+        const updated = [name, ...searchName];
+        localStorage.setItem("town", JSON.stringify(updated));
+        setSearchName(updated.slice(0, 4));
+      }
+    };
+        addName(name);
         
-
+// Weather response for weekly, current and hourly weather.
 let weatherRes = "";        
 let currentRes = "";
 let hourRes = "";
@@ -204,10 +196,11 @@ let hourRes = "";
         
        
          if (!weatherRes.ok) {
+           setApiError(true)
           throw new Error("No response received for daily weather");
          }
         const weatherData = await weatherRes.json();
-        console.table(weatherData.daily);
+        // console.table(weatherData.daily);
         setWeather((weather) => ({
           ...weather,
           dailyWeather: weatherData.daily,
@@ -216,7 +209,7 @@ let hourRes = "";
         
         if (!currentRes) throw new Error("failed to fetch current weather");
         const currentData = await currentRes.json();
-        console.log(currentData.current);
+        // console.log(currentData.current);
         setWeather((weather) => ({
           ...weather,
           currentWeather: currentData.current,
@@ -225,12 +218,18 @@ let hourRes = "";
         
         if (!hourRes) throw new Error("failed to fetch hourly weather");
         const hourData = await hourRes.json();
-        console.log(hourData);
+        // console.log(hourData);
         setWeather((weather) => ({
           ...weather,
           hourlyWeather: hourData.hourly,
         }));
+        setSearchError(false)
       } catch ({error}) {
+        if (error === undefined && location.currentLocation !== "" ) {
+          console.log(error)
+          setSearchError(true)
+        }
+        
         console.log(error)
       } finally {
         setIsLoading(false);
@@ -241,7 +240,7 @@ let hourRes = "";
     location.currentLocation,
     unit.temperature,
     unit.precipitation,
-    unit.windSpeed
+    unit.windSpeed,
   ]);
     function handleLocation(e) {
     e.preventDefault();
@@ -250,7 +249,7 @@ let hourRes = "";
       ...location,
       currentLocation: location.inputLocation,
     }));
-    setTimeout(()=> setLocation((location) => ({ ...location, inputLocation: "" })), 3000);
+    // setTimeout(()=> setLocation((location) => ({ ...location, inputLocation: "" })), 3000);
   }
   function handleKeyPress(e) {
     if (e.key === "Enter" || e.key === "Escape") {
@@ -262,11 +261,15 @@ let hourRes = "";
   }
   return (
     <div id="weather-app" >
-      <div className="top">
+    
         <Nav unit={unit} setUnit={setUnit} unitMenu={unitMenu} toggleUnitMenu={toggleUnitMenu}/>
-        <Header
-        isLoading={isLoading}
-        searchName={searchName}
+        {apiError && <ApiError setApiError={setApiError} />}
+        {!apiError &&
+      <>
+        <div className="top">
+          <Header
+          isLoading={isLoading}
+          searchName={searchName}
           onhandleLocation={handleLocation}
           setLocation={setLocation}
           onKeyPress={handleKeyPress}
@@ -275,23 +278,27 @@ let hourRes = "";
           setSearchHistoryMenu = {setSearchHistoryMenu}
 
         />
-      </div>
-      <div className="bottom">
-        <MainContent weather={weather} country={country} unit={unit} dayMenu ={dayMenu} setDayMenu={setDayMenu} />
-      </div>
-      <footer>
-        <div className="attribution">
-          Challenge by{" "}
-          <a href="https://www.frontendmentor.io?ref=challenge">
-            Frontend Mentor
-          </a>
-          . Coded by{" "}
-          <a href="https://x.com/A__Gabriel__T" target="blank">
-            Asogwa Tochukwu
-          </a>
-          .
         </div>
-      </footer>
+        { !searchError &&
+
+        <>
+          <div className="bottom">
+            <MainContent weather={weather} country={country} unit={unit} dayMenu ={dayMenu} setDayMenu={setDayMenu} />
+          </div>
+          <footer>
+            <div className="attribution">
+            Challenge by{" "}
+            <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>
+            . Coded by{" "}
+            <a href="https://x.com/A__Gabriel__T" target="blank">Asogwa Tochukwu</a>
+            .
+            </div>
+          </footer>
+        </>
+        }
+      {searchError && <NoSearchResult />}
+      </>
+      }
     </div>
   );
 }

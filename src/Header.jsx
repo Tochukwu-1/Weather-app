@@ -1,5 +1,6 @@
 import search from "./assets/images/icon-search.svg";
 import "./css/Header.css";
+import loadingImg from './assets/images/icon-loading.svg';
 
 function Header({
   isLoading,
@@ -14,9 +15,6 @@ function Header({
   const handleSearchHistory = (name) => {
     setLocation({ ...location, inputLocation: name, currentLocation: name });
     setSearchHistoryMenu(false);
-    setTimeout(() => {
-      setLocation({ ...location, inputLocation: "" });
-    }, 3000);
   };
 
   return (
@@ -42,7 +40,7 @@ function Header({
           </div>
           {isLoading && (
             <div className="loadingContainer">
-              <p className="loading">Search in progress...</p>
+              <p className="loading"><img src={loadingImg} alt="loading" /> Search in progress...</p>
             </div>
           )}
           {searchHistoryMenu && (

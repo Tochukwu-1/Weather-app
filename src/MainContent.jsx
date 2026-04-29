@@ -60,7 +60,7 @@ function MainContent({ weather, country, unit, dayMenu, setDayMenu }) {
           wind_speed_10m,
           relative_humidity_2m,
         } = weather.currentWeather;
-        console.log(weather.currentWeather);
+        // console.log(weather.currentWeather);
         setCurrrentWeather({
           precipitation: precipitation,
           temperature: temperature_2m,

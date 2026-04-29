@@ -1,0 +1,34 @@
+.apiError{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  width: 100%;
+  height: 80%;
+}
+.apiError img[alt="error image"]{
+  width: 30px;
+  height: 30px;
+}
+.apiError h1{
+  /* font-size: 1.5em; */
+  margin: 10px 0px;
+}
+.apiError p{
+  font-size: 0.7em;
+  margin-bottom: 15px;
+}
+.apiError button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 10px;
+  background-color: #272541;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

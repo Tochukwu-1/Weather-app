@@ -1,13 +1,13 @@
 header {
     display: flex;
     flex-direction: column;
-    /* text-align: center; */
-    height: 60%;
+    height: 100%;
     align-items: center;
+    justify-content: flex-end;
     width: 100%;
 }
 header h1{
-  font-size: 2.5em;
+  font-size: 2.3em;
   font-family: BricolageGrotesque;
 }
 header form {
@@ -78,7 +78,7 @@ header button {
   border-radius: 10px;
   background-color: #272541;
   padding: 5px;
-  background-color:  #272541cc;
+  background-color:  #272541;
   position: absolute;
   top: 100%;
 }
@@ -87,12 +87,12 @@ header button {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color:  #2725417d;
+  background-color:  #272541;
   cursor: pointer;
   width: 100%;
   height: 40px;
   font-size: 0.9rem;
-  border-bottom: 2px solid #211f37;
+  border-bottom: 2px solid #272541;
   border-radius: 5px;
   padding-left: 10px;
 
@@ -113,10 +113,15 @@ header button {
   margin-top: 7px;
 }
 .loading{
-  background-color:  #2725417d;
+  background-color:  #272541cc;
   width: 100%;
   height: 40px;
   font-size: 0.9rem;
   border-radius: 5px;
   padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
+.loading img{
+  margin-right: 15px;
 }
