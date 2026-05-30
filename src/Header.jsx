@@ -1,6 +1,7 @@
 import search from "./assets/images/icon-search.svg";
 import "./css/Header.css";
 import loadingImg from './assets/images/icon-loading.svg';
+import { useRef } from "react";
 
 function Header({
   isLoading,
@@ -12,14 +13,25 @@ function Header({
   searchHistoryMenu,
   setSearchHistoryMenu,
 }) {
+  
+  const inputRef = useRef(null);
   const handleSearchHistory = (name) => {
     setLocation({ ...location, inputLocation: name, currentLocation: name });
     setSearchHistoryMenu(false);
   };
+  function handleInputBlur(e){
+    setTimeout(() => {
+      if (inputRef.current && !inputRef.current.contains(e.relatedTarget)) {
+        setSearchHistoryMenu(false);
+  }   }, 100);
+}
+  function handleInputFocus(){
+    setSearchHistoryMenu(true);
+  }
 
   return (
     <header>
-      <h1>How's the sky looking today?</h1>
+      <h1 className="heading">How's the <span>sky looking</span> <span>today?</span></h1>
       <form onSubmit={(e) => onhandleLocation(e)}>
         <div className={searchHistoryMenu ? "inputs inputFocus" : "inputFocus"}>
           <div className="input">
@@ -35,7 +47,10 @@ function Header({
               onChange={(e) =>
                 setLocation({ ...location, inputLocation: e.target.value })
               }
-              onClick={() => setSearchHistoryMenu(!searchHistoryMenu)}
+              ref={inputRef}
+              onFocus={handleInputFocus}
+
+              onBlur={(e)=>handleInputBlur(e)}
             />
           </div>
           {isLoading && (

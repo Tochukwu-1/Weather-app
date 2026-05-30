@@ -28,7 +28,7 @@ The designs were created to the following widths:
 ### Blue
 
 - **Blue 500**: #4455da
-- **Blue 700**: hsl(248, 70%, 36%)
+- **Blue 700**: #2d1c9c
 
 ## Typography
 

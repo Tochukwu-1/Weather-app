@@ -13,19 +13,19 @@ function Parameters({currentWeather, unit}) {
         <div className="parameters">
               <div className="parameter">
                 <p>Feels like</p>
-                <li>{Math.round(temperature || 0)} &deg;</li>
+                {temperature===undefined && <li className='loadingDash'></li>}{temperature && <li>{Math.round(temperature)} &deg;</li>}
               </div>
               <div className="parameter">
                 <p>Humidity</p>
-                <li>{humidity || 0} %</li>
+                {humidity===undefined && <li className='loadingDash'></li>}{humidity && <li>{humidity} %</li>}
               </div>
               <div className="parameter">
                 <p>Wind</p>
-                <li>{windSpeed || 0} {unit.windSpeed==="kmh"?"km/h": "mph"}</li>
+                {windSpeed===undefined && <li className='loadingDash'></li>}{windSpeed && <li>{windSpeed} {unit.windSpeed==="kmh"?"km/h": "mph"}</li>}
               </div>
               <div className="parameter">
                 <p>Precipitation</p>
-                <li>{precipitation || 0} {unit.precipitation ==="millimeter"? "mm": "inches"}</li>
+                {precipitation===undefined && <li className='loadingDash'></li>}{precipitation && <li>{precipitation} {unit.precipitation ==="inch"? "inch": "mm"}</li>}
               </div>
             </div>
     )

@@ -3,8 +3,9 @@ import ReactDom from 'react-dom/client'
 
 
 function Weekly({weeklyWeather, handleDay, getWeatherIcon}) {
-    
+    const emptyDate = ["", "", "", "", "", "", ""];
   const { dates, minTemp, maxTemp, weather_code } = weeklyWeather;
+  
     return (
         <div className="weekly">
             <h4>Daily Forcast</h4>
@@ -19,6 +20,10 @@ function Weekly({weeklyWeather, handleDay, getWeatherIcon}) {
                     <span>{Math.round(maxTemp.at(i))}&deg;</span>
                     <span>{Math.round(minTemp.at(i))}&deg;</span>
                   </li>
+                </div>
+              ))}  
+              {dates.length === 0 && emptyDate.map((date, i) => (
+                <div key={i} className="day">
                 </div>
               ))}
             </div>

@@ -12,8 +12,9 @@ import Today from "./components/Today";
 import Parameters from "./components/Parameters";
 import Weekly from "./components/Weekly";
 import Hours from "./components/Hours";
+import "./css/mainContent.css";
 
-function MainContent({ weather, country, unit, dayMenu, setDayMenu }) {
+function MainContent({ weather, country, unit, dayMenu, setDayMenu}) {
 
   const date = new Date();
   const [selectedDay, setSelectedDay] = useState(handleDay(date));
@@ -118,12 +119,14 @@ function MainContent({ weather, country, unit, dayMenu, setDayMenu }) {
   return (
     <main>
       <section>
+        
         <div className="left">
+          
           <Today
-            country={country}
-            handleCurrentDay={handleCurrentDay}
-            currentWeather={currentWeather}
-            getWeatherIcon={getWeatherIcon}
+          country={country}
+          handleCurrentDay={handleCurrentDay}
+          currentWeather={currentWeather}
+          getWeatherIcon={getWeatherIcon}
           />
           <Parameters unit={unit} currentWeather={currentWeather} />
           <Weekly

@@ -27,14 +27,19 @@ function Hours({
     "Saturday",
     "Sunday",
   ];
+  const empty24Hours = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
 
   return (
     <>
       <div className="top">
         <h4>Hourly forecast</h4>
-        <div onClick={() => setDayMenu(!dayMenu)} className="selectedDay">
-          {selectedDay} <img src={dropdown} alt="" />
-        </div>
+        {hourlyTemperature ? (
+          <div onClick={() => setDayMenu(!dayMenu)} className="selectedDay">
+            {selectedDay} <img src={dropdown} alt="" />
+          </div>
+        ) : (
+          <div className="selectedDay"> --</div>
+        )}
         {dayMenu && (
           <div name="day" id="week" className="activeday select">
             {weekdays.map((day, i) => (
@@ -55,6 +60,7 @@ function Hours({
         )}
       </div>
       <ul className="hours">
+        {!hourlyTemperature && empty24Hours.map((hour,index)=><li className="hour" key={index}>-</li>)}
         {weather?.hourlyWeather?.time &&
           hourlyTime
             ?.map((hour, index) => ({

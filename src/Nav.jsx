@@ -11,7 +11,7 @@ function Nav({unit, setUnit, unitMenu, toggleUnitMenu}) {
         <nav id='navigationBar'>
             <img src={logo} alt="weather app logo" />
             <div className="units">
-                <span className={`unitsButton ${unitMenu?"unitsButtonFocus":""}`} onClick={toggleUnitMenu} > <img src={settings}/> Units <img src={dropdown} />
+                <span className={`unitsButton ${unitMenu?"unitsButtonFocus":""}`} onClick={toggleUnitMenu} > <img src={settings}/> Units <img alt="unit menu" src={dropdown} />
                 </span>
                 {unitMenu && <form onSubmit={(e) => (e)}>
                     <h4 className='unitSwitch' onClick={()=> setUnitSwitch(unitSwitch==="Switch Metrics"? "Switch Imperial": "Switch Metrics") |setUnit(unitSwitch === "Switch Imperial"?{...unit,temperature:"fahrenheit", windSpeed:"mph",precipitation:"inch"}:{...unit,temperature:"celcius", windSpeed:"kmh",precipitation:"millimeter"})}>{unitSwitch}</h4>

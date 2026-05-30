@@ -1,51 +1,60 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Nav from "./Nav.jsx";
 import Header from "./Header.jsx";
 import MainContent from "./MainContent.jsx";
 import "./index.css";
 import ApiError from "./components/ApiError.jsx";
 import NoSearchResult from "./components/NoSearchResult.jsx";
+import "./css/mobileView.css";
 
 function App() {
-  const [unitMenu, setUnitMenu] = useState(false)
-  const [searchHistoryMenu, setSearchHistoryMenu] = useState(false)
-  const [dayMenu, setDayMenu] = useState(false)
-  const [searchError, setSearchError] = useState(false)
-  const [apiError, setApiError] = useState(false)
+  const [unitMenu, setUnitMenu] = useState(false);
+  const [searchHistoryMenu, setSearchHistoryMenu] = useState(false);
+  const [dayMenu, setDayMenu] = useState(false);
+  const [searchError, setSearchError] = useState(false);
+  const [apiError, setApiError] = useState(false);
   const localStorageName = JSON.parse(localStorage.getItem("town"));
-  const [searchName,setSearchName] = useState(localStorageName.slice(0,4) || []);
+  const [searchName, setSearchName] = useState(
+    localStorageName.slice(0, 4) || [],
+  );
   const [isLoading, setIsLoading] = useState(false);
 
-  const [location, setLocation] = useState({inputLocation: "",currentLocation: ""});
-  const [weather, setWeather] = useState({dailyweather: [],hourlyWeather: [],currentWeather: []});
+  const [location, setLocation] = useState({
+    inputLocation: "",
+    currentLocation: "",
+  });
+  const [weather, setWeather] = useState({
+    dailyweather: [],
+    hourlyWeather: [],
+    currentWeather: [],
+  });
   const [country, setCountry] = useState({ town: "", country: "" });
-  const [unit, setUnit] = useState({temperature: "celcius",windSpeed: "kmh",precipitation: "millimeter"});
+  const [unit, setUnit] = useState({
+    temperature: "celcius",
+    windSpeed: "kmh",
+    precipitation: "millimeter",
+  });
   function toggleMenu() {
-    setTimeout(()=>
-      {
-        setUnitMenu(false);
-        setSearchHistoryMenu(false);
-        setDayMenu(false)
-      },300)
+    setTimeout(() => {
+      setUnitMenu(false);
+      setSearchHistoryMenu(false);
+      setDayMenu(false);
+    }, 100);
   }
-const toggleUnitMenu = () => {
-         setUnitMenu(true)
-         if(unitMenu){
-             setTimeout(() => {
-                 setUnitMenu(false);
-                }, 300);
-            }
-        }
-
-
-
+  const toggleUnitMenu = () => {
+    setUnitMenu(true);
+    if (unitMenu) {
+      setTimeout(() => {
+        setUnitMenu(false);
+      }, 300);
+    }
+  };
 
   useEffect(() => {
     async function fetchWeather() {
-
       try {
-        toggleMenu()
-        
+        toggleMenu();
+
         // location api to get longitude and latitude of desired location
         const geoRes = await fetch(
           `https://geocoding-api.open-meteo.com/v1/search?name=${location.currentLocation}`,
@@ -63,142 +72,162 @@ const toggleUnitMenu = () => {
         } = locationParameters;
         setCountry({ town: name, country: country });
         const addName = (name) => {
-      if (searchName.includes(name)) { 
-        const reupdate = searchName.filter((item) => item !== name);
-        const updated = [name, ...reupdate];
-        localStorage.setItem("town", JSON.stringify(updated));
-        setSearchName(updated.slice(0, 4));
-      } else {
-        const updated = [name, ...searchName];
-        localStorage.setItem("town", JSON.stringify(updated));
-        setSearchName(updated.slice(0, 4));
-      }
-    };
+          if (searchName.includes(name)) {
+            const reupdate = searchName.filter((item) => item !== name);
+            const updated = [name, ...reupdate];
+            localStorage.setItem("town", JSON.stringify(updated));
+            setSearchName(updated.slice(0, 4));
+          } else {
+            const updated = [name, ...searchName];
+            localStorage.setItem("town", JSON.stringify(updated));
+            setSearchName(updated.slice(0, 4));
+          }
+        };
         addName(name);
-        
-// Weather response for weekly, current and hourly weather.
-let weatherRes = "";        
-let currentRes = "";
-let hourRes = "";
 
-        if (unit.temperature === "fahrenheit" && unit.precipitation === "inch" && unit.windSpeed === "mph") {
-           // weather api for the daily weather
-           weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`
-          );
-          // current weather api
-           currentRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`
-          );
-            //hourly Api
-           hourRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`
-          );
-        }
-        else if (unit.temperature === "celcius" && unit.precipitation === "inch" && unit.windSpeed === "mph") {
+        // Weather response for weekly, current and hourly weather.
+        let weatherRes = "";
+        let currentRes = "";
+        let hourRes = "";
+
+        if (
+          unit.temperature === "fahrenheit" &&
+          unit.precipitation === "inch" &&
+          unit.windSpeed === "mph"
+        ) {
           // weather api for the daily weather
           weatherRes = await fetch(
-           `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&precipitation_unit=inch`
-         );
-         // current weather api
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`,
+          );
+          // current weather api
           currentRes = await fetch(
-           `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&precipitation_unit=inch`
-         );
-           //hourly Api
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`,
+          );
+          //hourly Api
           hourRes = await fetch(
-             `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph&precipitation_unit=inch`
-         );
-        }
-        else if (unit.temperature === "celcius" && unit.precipitation === "inch" && unit.windSpeed === "kmh") {
-             // weather api for the daily weather
-           weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&precipitation_unit=inch`
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`,
           );
-          // current weather api
-           currentRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&precipitation_unit=inch`
-          );
-            //hourly Api
-           hourRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&precipitation_unit=inch`
-          );
-        }
-        else if (unit.temperature === "celcius" && unit.precipitation === "millimeter" && unit.windSpeed === "mph") {
+        } else if (
+          unit.temperature === "celcius" &&
+          unit.precipitation === "inch" &&
+          unit.windSpeed === "mph"
+        ) {
           // weather api for the daily weather
-           weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph`
+          weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&precipitation_unit=inch`,
           );
           // current weather api
-           currentRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph`
+          currentRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&precipitation_unit=inch`,
           );
-            //hourly Api
-           hourRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph`
-           )
-        }
-        else if (unit.temperature === "fahrenheit" && unit.precipitation === "millimeter" && unit.windSpeed === "kmh") {
+          //hourly Api
+          hourRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph&precipitation_unit=inch`,
+          );
+        } else if (
+          unit.temperature === "celcius" &&
+          unit.precipitation === "inch" &&
+          unit.windSpeed === "kmh"
+        ) {
           // weather api for the daily weather
-           weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=fahrenheit`
+          weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&precipitation_unit=inch`,
           );
           // current weather api
-           currentRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&temperature_unit=fahrenheit`
+          currentRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&precipitation_unit=inch`,
           );
-            //hourly Api
-           hourRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&temperature_unit=fahrenheit`
+          //hourly Api
+          hourRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&precipitation_unit=inch`,
           );
-        }
-        else if (unit.temperature === "fahrenheit" && unit.precipitation === "millimeter" && unit.windSpeed === "mph") {
-            // weather api for the daily weather
-           weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit`
-          );
-          // current weather api
-           currentRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit`
-          );
-            //hourly Api
-           hourRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit`
-          );
-        }
-        else if (unit.temperature === "fahrenheit" && unit.precipitation === "inch" && unit.windSpeed === "kmh") {
+        } else if (
+          unit.temperature === "celcius" &&
+          unit.precipitation === "millimeter" &&
+          unit.windSpeed === "mph"
+        ) {
           // weather api for the daily weather
-           weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=fahrenheit&precipitation_unit=inch`
+          weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph`,
           );
           // current weather api
-           currentRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&temperature_unit=fahrenheit&precipitation_unit=inch`
+          currentRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph`,
           );
-            //hourly Api
-           hourRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&temperature_unit=fahrenheit&precipitation_unit=inch`
-           )
-        }
-        else {
-        // weather api for the daily weather
-           weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`
+          //hourly Api
+          hourRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph`,
+          );
+        } else if (
+          unit.temperature === "fahrenheit" &&
+          unit.precipitation === "millimeter" &&
+          unit.windSpeed === "kmh"
+        ) {
+          // weather api for the daily weather
+          weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=fahrenheit`,
           );
           // current weather api
-           currentRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`
+          currentRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&temperature_unit=fahrenheit`,
           );
-            //hourly Api
-           hourRes = await fetch(
-              `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto`
+          //hourly Api
+          hourRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&temperature_unit=fahrenheit`,
+          );
+        } else if (
+          unit.temperature === "fahrenheit" &&
+          unit.precipitation === "millimeter" &&
+          unit.windSpeed === "mph"
+        ) {
+          // weather api for the daily weather
+          weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit`,
+          );
+          // current weather api
+          currentRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit`,
+          );
+          //hourly Api
+          hourRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit`,
+          );
+        } else if (
+          unit.temperature === "fahrenheit" &&
+          unit.precipitation === "inch" &&
+          unit.windSpeed === "kmh"
+        ) {
+          // weather api for the daily weather
+          weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=fahrenheit&precipitation_unit=inch`,
+          );
+          // current weather api
+          currentRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto&temperature_unit=fahrenheit&precipitation_unit=inch`,
+          );
+          //hourly Api
+          hourRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto&temperature_unit=fahrenheit&precipitation_unit=inch`,
+          );
+        } else {
+          // weather api for the daily weather
+          weatherRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`,
+          );
+          // current weather api
+          currentRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`,
+          );
+          //hourly Api
+          hourRes = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=temperature_2m,weather_code&timezone=auto`,
           );
         }
-        
-       
-         if (!weatherRes.ok) {
-           setApiError(true)
+
+        if (!weatherRes.ok) {
+          setApiError(true);
           throw new Error("No response received for daily weather");
-         }
+        }
         const weatherData = await weatherRes.json();
         // console.table(weatherData.daily);
         setWeather((weather) => ({
@@ -206,7 +235,6 @@ let hourRes = "";
           dailyWeather: weatherData.daily,
         }));
 
-        
         if (!currentRes) throw new Error("failed to fetch current weather");
         const currentData = await currentRes.json();
         // console.log(currentData.current);
@@ -215,7 +243,6 @@ let hourRes = "";
           currentWeather: currentData.current,
         }));
 
-        
         if (!hourRes) throw new Error("failed to fetch hourly weather");
         const hourData = await hourRes.json();
         // console.log(hourData);
@@ -223,14 +250,14 @@ let hourRes = "";
           ...weather,
           hourlyWeather: hourData.hourly,
         }));
-        setSearchError(false)
-      } catch ({error}) {
-        if (error === undefined && location.currentLocation !== "" ) {
-          console.log(error)
-          setSearchError(true)
+        setSearchError(false);
+      } catch ({ error }) {
+        if (error === undefined && location.currentLocation !== "") {
+          console.log(error);
+          setSearchError(true);
         }
-        
-        console.log(error)
+
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -242,7 +269,7 @@ let hourRes = "";
     unit.precipitation,
     unit.windSpeed,
   ]);
-    function handleLocation(e) {
+  function handleLocation(e) {
     e.preventDefault();
 
     setLocation((location) => ({
@@ -253,54 +280,70 @@ let hourRes = "";
   }
   function handleKeyPress(e) {
     if (e.key === "Enter" || e.key === "Escape") {
-      setUnitMenu(false)
+      setUnitMenu(false);
       setTimeout(() => {
         e.target.blur();
       }, 1000);
     }
   }
   return (
-    <div id="weather-app" >
-    
-        <Nav unit={unit} setUnit={setUnit} unitMenu={unitMenu} toggleUnitMenu={toggleUnitMenu}/>
-        {apiError && <ApiError setApiError={setApiError} />}
-        {!apiError &&
-      <>
-        <div className="top">
-          <Header
-          isLoading={isLoading}
-          searchName={searchName}
-          onhandleLocation={handleLocation}
-          setLocation={setLocation}
-          onKeyPress={handleKeyPress}
-          location={location}
-          searchHistoryMenu= { searchHistoryMenu}
-          setSearchHistoryMenu = {setSearchHistoryMenu}
-
-        />
-        </div>
-        { !searchError &&
-
+    <div id="weather-app">
+      <Nav
+        unit={unit}
+        setUnit={setUnit}
+        unitMenu={unitMenu}
+        toggleUnitMenu={toggleUnitMenu}
+      />
+      {apiError && <ApiError setApiError={setApiError} />}
+      {!apiError && (
         <>
-          <div className="bottom">
-            <MainContent weather={weather} country={country} unit={unit} dayMenu ={dayMenu} setDayMenu={setDayMenu} />
+          <div className="top">
+            <Header
+              isLoading={isLoading}
+              searchName={searchName}
+              onhandleLocation={handleLocation}
+              setLocation={setLocation}
+              onKeyPress={handleKeyPress}
+              location={location}
+              searchHistoryMenu={searchHistoryMenu}
+              setSearchHistoryMenu={setSearchHistoryMenu}
+            />
           </div>
-          <footer>
-            <div className="attribution">
-            Challenge by{" "}
-            <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>
-            . Coded by{" "}
-            <a href="https://x.com/A__Gabriel__T" target="blank">Asogwa Tochukwu</a>
-            .
-            </div>
-          </footer>
+          {!searchError && (
+            <>
+              <div className="bottom">
+                <MainContent
+                  weather={weather}
+                  country={country}
+                  unit={unit}
+                  dayMenu={dayMenu}
+                  setDayMenu={setDayMenu}
+                  location={location}
+                />
+              </div>
+              <footer>
+                <div className="attribution">
+                  Challenge by{" "}
+                  <a href="https://www.frontendmentor.io?ref=challenge">
+                    Frontend Mentor
+                  </a>
+                  . Coded by{" "}
+                  <a href="https://x.com/A__Gabriel__T" target="blank">
+                    Asogwa Tochukwu
+                  </a>
+                  .
+                </div>
+              </footer>
+            </>
+          )}
+          {searchError && <NoSearchResult />}
         </>
-        }
-      {searchError && <NoSearchResult />}
-      </>
-      }
+      )}
     </div>
   );
 }
 
 export default App;
+
+
+
