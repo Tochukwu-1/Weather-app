@@ -28,6 +28,14 @@ function Header({
   function handleInputFocus(){
     setSearchHistoryMenu(true);
   }
+  function handleInputChange(e){
+    if(searchName.includes(e.target.value) || e.target.value === ""){
+    setSearchHistoryMenu(true);
+    }
+    else{
+      setSearchHistoryMenu(false);
+    }
+  }
 
   return (
     <header>
@@ -49,7 +57,7 @@ function Header({
               }
               ref={inputRef}
               onFocus={handleInputFocus}
-
+              onInput={(e)=>handleInputChange(e)}
               onBlur={(e)=>handleInputBlur(e)}
             />
           </div>
