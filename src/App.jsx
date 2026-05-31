@@ -15,7 +15,7 @@ function App() {
   const [apiError, setApiError] = useState(false);
   const localStorageName = JSON.parse(localStorage.getItem("town"));
   const [searchName, setSearchName] = useState(
-    localStorageName.slice(0, 4) || [],
+    localStorageName?.slice(0, 4) || [],
   );
   const [isLoading, setIsLoading] = useState(false);
 
