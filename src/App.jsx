@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Nav from "./Nav.jsx";
-import Header from "./Header.jsx";
+import Nav from "./components/Nav.jsx";
+import Header from "./components/Header.jsx";
 import MainContent from "./MainContent.jsx";
 import "./index.css";
 import ApiError from "./components/ApiError.jsx";

@@ -83,7 +83,7 @@ main section aside {
 }
 
 .today{
-  background-image: url(src/assets/images/bg-today-large.svg);
+  background-image: url(/assets/images/bg-today-large.svg);
   background-size: cover;
   border-radius: 10px;
   display: flex;
@@ -219,7 +219,6 @@ aside .top{
 }
 .option:hover{
   background-color: #3d3b5e;
-  accent-color: green;
   border-radius: 5px;
 }
 

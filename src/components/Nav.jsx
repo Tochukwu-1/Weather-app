@@ -1,7 +1,7 @@
-import logo from './assets/images/logo.svg';
-import dropdown from './assets/images/icon-dropdown.svg';
-import settings from './assets/images/icon-units.svg';
-import "./css/nav.css"
+import logo from '/assets/images/logo.svg';
+import dropdown from '/assets/images/icon-dropdown.svg';
+import settings from '/assets/images/icon-units.svg';
+import "../css/nav.css"
 import { useState } from 'react';
 
 function Nav({unit, setUnit, unitMenu, toggleUnitMenu}) {

@@ -1,7 +1,7 @@
-import search from "./assets/images/icon-search.svg";
-import "./css/Header.css";
-import loadingImg from './assets/images/icon-loading.svg';
 import { useRef } from "react";
+import "../css/Header.css";
+import search from "/assets/images/icon-search.svg";
+import loadingImg from '/assets/images/icon-loading.svg';
 
 function Header({
   isLoading,

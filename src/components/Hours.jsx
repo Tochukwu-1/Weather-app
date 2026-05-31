@@ -1,5 +1,5 @@
 import ReactDom from "react-dom/client";
-import dropdown from "../assets/images/icon-dropdown.svg";
+import dropdown from "/assets/images/icon-dropdown.svg";
 
 function Hours({
   weather,

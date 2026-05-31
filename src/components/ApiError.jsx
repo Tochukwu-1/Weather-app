@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDom from 'react-dom/client'
-import errorImg from '../assets/images/icon-error.svg'
-import retryImg from '../assets/images/icon-retry.svg';
-import 'src/css/ApiError.css'
+import errorImg from '/assets/images/icon-error.svg'
+import retryImg from '/assets/images/icon-retry.svg';
+import '../css/ApiError.css'
 
 
 function ApiError({setApiError}) {
